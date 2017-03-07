@@ -15,8 +15,8 @@ import okhttp3.logging.HttpLoggingInterceptor;
  */
 public class OkHttpFactory {
     private static OkHttpClient okHttpClient;//与聚合数据相关
-    private static final int TIMEOUT_READ = 10;
-    private static final int TIMEOUT_CONNECTION = 10;
+    private static final int TIMEOUT_READ = 5;
+    private static final int TIMEOUT_CONNECTION = 5;
 
     public synchronized static OkHttpClient getInstance() {
         if (okHttpClient == null) {

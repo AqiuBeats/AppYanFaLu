@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.aqiu.rxzone.R;
 import com.aqiu.rxzone.bean.Douban;
 import com.aqiu.rxzone.request.NetRequest;
+import com.aqiu.rxzone.ui.base.BaseActivity;
 import com.aqiu.rxzone.utils.L;
 import com.aqiu.rxzone.utils.RxHelper;
 import com.aqiu.rxzone.utils.RxSubscriber;
@@ -28,22 +29,22 @@ public class SecondActivity extends BaseActivity {
     private int count;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    protected int initLayout() {
+    public int initLayout() {
         return R.layout.activity_second;
     }
 
     @Override
-    protected void initDatas() {
+    public void initDatas() {
 
     }
 
     @Override
-    protected void reDatas() {
+    public void reDatas() {
 
     }
 
@@ -66,7 +67,7 @@ public class SecondActivity extends BaseActivity {
     //    }
 
     @Override
-    protected void onStop() {
+    public void onStop() {
         L.i("真的假的,我会运行?");
         super.onStop();
     }

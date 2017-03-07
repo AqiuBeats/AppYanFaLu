@@ -1,8 +1,9 @@
-package com.aqiu.rxzone.ui;
+package com.aqiu.rxzone.ui.base;
 
 import android.app.Activity;
 import android.os.Bundle;
 
+import com.aqiu.rxzone.ui.MainActivity;
 import com.aqiu.rxzone.utils.Tutils;
 
 import java.lang.ref.WeakReference;
@@ -21,11 +22,11 @@ public abstract class BaseActivity extends RxActivity {
      * activity控制
      */
     public static Map<String, WeakReference<Activity>> openedActivitys = new LinkedHashMap<>();// 已经打开的activity
-    protected Bundle savedInstanceState;
+    public Bundle savedInstanceState;
     private long exitTime = 0;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (!openedActivitys.keySet().contains(getClass().getSimpleName())) {
             openedActivitys.put(getClass().getSimpleName(),
@@ -38,13 +39,13 @@ public abstract class BaseActivity extends RxActivity {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
         reDatas();
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         openedActivitys.remove(getClass().getSimpleName());
     }
@@ -52,17 +53,17 @@ public abstract class BaseActivity extends RxActivity {
     /**
      * 在onCreate初始化Views
      */
-    protected abstract int initLayout();
+    public abstract int initLayout();
 
     /**
      * 在onCreate初始化数据
      */
-    protected abstract void initDatas();
+    public abstract void initDatas();
 
     /**
      * 在onResume()生命周期中调用
      */
-    protected abstract void reDatas();
+    public abstract void reDatas();
 
     @Override
     public void onBackPressedSupport() {

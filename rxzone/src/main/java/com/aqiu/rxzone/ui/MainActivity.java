@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.Button;
 
 import com.aqiu.rxzone.R;
+import com.aqiu.rxzone.ui.base.BaseActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -15,22 +16,22 @@ public class MainActivity extends BaseActivity {
     Button bt1;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
     }
 
     @Override
-    protected int initLayout() {
+    public int initLayout() {
         return R.layout.activity_main;
     }
 
     @Override
-    protected void initDatas() {
+    public void initDatas() {
 
     }
 
     @Override
-    protected void reDatas() {
+    public void reDatas() {
 
     }
 

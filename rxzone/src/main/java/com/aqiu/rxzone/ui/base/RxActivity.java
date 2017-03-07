@@ -1,4 +1,4 @@
-package com.aqiu.rxzone.ui;
+package com.aqiu.rxzone.ui.base;
 
 import android.os.Bundle;
 import android.support.annotation.CallSuper;

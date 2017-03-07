@@ -1,7 +1,7 @@
 package com.aqiu.rxzone.utils;
 
 
-import com.aqiu.rxzone.ui.RxActivity;
+import com.aqiu.rxzone.ui.base.RxActivity;
 import com.trello.rxlifecycle.RxLifecycle;
 import com.trello.rxlifecycle.android.ActivityEvent;
 

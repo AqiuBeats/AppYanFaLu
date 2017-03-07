@@ -19,10 +19,10 @@ public class RetrofitClient {
         //        System.out.println("retrofit:" + WebApi.BASE_URL);
         if (retrofit == null) {
             return retrofit = new Retrofit.Builder()
-                    .baseUrl("https://api.douban.com")
+                    .baseUrl(WebApi.BASE_URL)
                     .client(OkHttpFactory.getInstance())
                     .addConverterFactory(ScalarsConverterFactory.create())//只进行字符串的操作
-                    .addConverterFactory(GsonConverterFactory.create())
+                    .addConverterFactory(GsonConverterFactory.create())//进行对象转化操作
                     .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                     .build();
         }

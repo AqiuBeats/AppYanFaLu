@@ -1,8 +1,11 @@
 package com.aqiu.rxzone.utils;
 
+import com.aqiu.rxzone.application.MyApplication;
+
 import rx.Subscriber;
 
 /**
+ * 对三种状态的封装
  * Created by a on 2016/5/6.
  */
 public abstract class RxSubscriber<T> extends Subscriber<T> {
@@ -10,6 +13,7 @@ public abstract class RxSubscriber<T> extends Subscriber<T> {
     public void onCompleted() {
         ProgressDialogUtil.dismiss();
         L.i("即使我Activity不在了,我也不会立马消失,哈哈哈!");
+        Tutils.showToast(MyApplication.getObjectContext(), "连接成功");
     }
 
     @Override
@@ -18,10 +22,11 @@ public abstract class RxSubscriber<T> extends Subscriber<T> {
 
         _onError(e.getMessage());
         ProgressDialogUtil.dismiss();
-//        if (!NetUtils.isConnected(MyApplication.getContextObject())) {
-//            MYToast.show("请求失败，请检查网络!");
-//            return;
-//        }
+        Tutils.showToast(MyApplication.getObjectContext(), "连接失败");
+        //        if (!NetUtils.isConnected(MyApplication.getContextObject())) {
+        //            MYToast.show("请求失败，请检查网络!");
+        //            return;
+        //        }
     }
 
     @Override
