@@ -3,7 +3,6 @@ package com.aqiu.rxzone.ui;
 import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.TypedValue;
@@ -64,8 +63,10 @@ public class TestActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         GridLayoutManager gridLayoutManager = new GridLayoutManager(TestActivity.this, 3);
         gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         mRecy.setHasFixedSize(true);
-        mRecy.setItemAnimator(new DefaultItemAnimator());
         mRecy.setLayoutManager(gridLayoutManager);
+        mRecy.setItemAnimator(null);
+//        mRecy.scheduleLayoutAnimation();
+//        mRecy.startLayoutAnimation();
         netRequest(pager);
     }
 
@@ -109,7 +110,6 @@ public class TestActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                             mSwipeRefreshWidget.setRefreshing(false);
                             isOnRefresh = false;
                         }
-
                         //                        if (isOnLoadMore) {
                         //                            //                            girlsAdapter.loadComplete();
                         //                            L.e("上拉完成_正确");
@@ -130,26 +130,28 @@ public class TestActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                         //                            isOnLoadMore = false;
                         //                        }
                     }
-
                     @Override
                     public void onNext(Girls girls) {
                         if (girls != null) {
                             final List<Girls.TngouEntity> girlsTngou = girls.getTngou();
                             synchronized (this) {
+
                                 mRecy.postDelayed(new Runnable() {
                                     @Override
                                     public void run() {
                                         if (isOnLoadMore) {
                                             L.e("上拉加载");
                                             mQuickAdapter.addData(girlsTngou);
-                                            boolean loading = mQuickAdapter.isLoading();
-                                            L.e(loading + "==家在了么");
+                                            mQuickAdapter.notifyItemChanged(1);
+//                                            mQuickAdapter.notifyDataSetChanged();
+//                                            mQuickAdapter.notify();
+//                                            L.e(loading + "==家在了么");
                                             //                                            mQuickAdapter.loadComplete();
                                         } else {
                                             initAdapter(girlsTngou);
                                         }
                                     }
-                                }, 500);
+                                }, 100);
                             }
                         } else {
                             L.e("上拉完成_错误");
