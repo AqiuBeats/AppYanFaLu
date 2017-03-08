@@ -10,10 +10,10 @@ import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 
 /**
- * Rxrecycle的封装
- * Created by a on 2016/5/6.
+ * rxRecycle的封装
+ * Created by aqiu on 2017/3/6.
  */
-public class RxHelper<T> {
+public abstract class RxHelper<T> {
     public Observable.Transformer<T, T> io_main(final RxActivity context) {
         return new Observable.Transformer<T, T>() {
 
@@ -25,7 +25,7 @@ public class RxHelper<T> {
                         .doOnSubscribe(new Action0() {
                             @Override
                             public void call() {
-                                ProgressDialogUtil.showProgress(context, "正在加载，请稍候");
+                                doMain();
                             }
                         })
                         .subscribeOn(AndroidSchedulers.mainThread())
@@ -34,4 +34,9 @@ public class RxHelper<T> {
             }
         };
     }
+
+    /**
+     * 主线程初始操作
+     */
+    public abstract void doMain();
 }

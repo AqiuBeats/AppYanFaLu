@@ -10,7 +10,6 @@ import com.aqiu.rxzone.R;
 import com.aqiu.rxzone.bean.Douban;
 import com.aqiu.rxzone.request.NetRequest;
 import com.aqiu.rxzone.ui.base.BaseActivity;
-import com.aqiu.rxzone.utils.L;
 import com.aqiu.rxzone.utils.RxHelper;
 import com.aqiu.rxzone.utils.RxSubscriber;
 
@@ -55,7 +54,8 @@ public class SecondActivity extends BaseActivity {
                 netTest();
                 break;
             case R.id.bt3:
-                startActivity(new Intent(SecondActivity.this, ThirdActivity.class));
+                //                startActivity(new Intent(SecondActivity.this, ThirdActivity.class));
+                startActivity(new Intent(SecondActivity.this, TestActivity.class));
                 break;
         }
     }
@@ -68,23 +68,22 @@ public class SecondActivity extends BaseActivity {
 
     @Override
     public void onStop() {
-        L.i("真的假的,我会运行?");
         super.onStop();
     }
 
     private void netTest() {
         NetRequest.getObservable("1", "250")
-                .compose(new RxHelper<Douban>().io_main(SecondActivity.this))
+                .compose(new RxHelper<Douban>() {
+                    @Override
+                    public void doMain() {
+
+                    }
+                }.io_main(SecondActivity.this))
                 .subscribe(new RxSubscriber<Douban>() {
                     @Override
                     public void _onNext(Douban d) {
                         String ss = d.getSubjects().get(10).getTitle();
                         tv2.setText(ss);
-                    }
-
-                    @Override
-                    public void _onError(String msg) {
-
                     }
                 });
     }

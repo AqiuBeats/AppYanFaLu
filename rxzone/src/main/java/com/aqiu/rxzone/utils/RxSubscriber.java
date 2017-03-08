@@ -11,8 +11,7 @@ import rx.Subscriber;
 public abstract class RxSubscriber<T> extends Subscriber<T> {
     @Override
     public void onCompleted() {
-        ProgressDialogUtil.dismiss();
-        L.i("即使我Activity不在了,我也不会立马消失,哈哈哈!");
+//        ProgressDialogUtil.dismiss();
         Tutils.showToast(MyApplication.getObjectContext(), "连接成功");
     }
 
@@ -20,8 +19,8 @@ public abstract class RxSubscriber<T> extends Subscriber<T> {
     public void onError(Throwable e) {
         e.printStackTrace();
 
-        _onError(e.getMessage());
-        ProgressDialogUtil.dismiss();
+//        _onError(e.getMessage());
+//        ProgressDialogUtil.dismiss();
         Tutils.showToast(MyApplication.getObjectContext(), "连接失败");
         //        if (!NetUtils.isConnected(MyApplication.getContextObject())) {
         //            MYToast.show("请求失败，请检查网络!");
@@ -36,5 +35,5 @@ public abstract class RxSubscriber<T> extends Subscriber<T> {
 
     public abstract void _onNext(T t);
 
-    public abstract void _onError(String msg);
+//    public abstract void _onError(String msg);
 }
