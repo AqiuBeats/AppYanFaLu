@@ -56,7 +56,7 @@ public class TestActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         isOnRefresh = false;
         isOnLoadMore = false;
         mSwipeRefreshWidget.setColorSchemeResources(R.color.blue, R.color.red, R.color.gold, R.color.green);//设置进度动画的颜色。
-        mSwipeRefreshWidget.setSize(SwipeRefreshLayout.DEFAULT);//设置进度圈大小
+        mSwipeRefreshWidget.setSize(SwipeRefreshLayout.DEFAULT);//设置进度圈大小11
         mSwipeRefreshWidget.setProgressBackgroundColorSchemeResource(R.color.white);//设置进度圈背景色
         mSwipeRefreshWidget.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));//设置进度圈休息的位置
         mSwipeRefreshWidget.setOnRefreshListener(this);//设置进度圈下拉响应
