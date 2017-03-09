@@ -132,7 +132,7 @@ public class ThirdActivity extends BaseActivity {
                                     if (isOnLoadMore) {
                                         L.e("上拉加载");
                                         girlsAdapter.addData(girlsTngou);
-                                        girlsAdapter.loadComplete();
+                                        girlsAdapter.loadMoreComplete();
                                     } else {
                                         recyclerView.setAdapter(girlsAdapter);
                                     }

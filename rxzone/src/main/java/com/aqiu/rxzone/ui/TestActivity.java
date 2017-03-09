@@ -1,30 +1,30 @@
 package com.aqiu.rxzone.ui;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.TextView;
 
 import com.aqiu.rxzone.R;
 import com.aqiu.rxzone.adapter.GirlsAdapter;
 import com.aqiu.rxzone.bean.Girls;
+import com.aqiu.rxzone.bean.Girls.TngouEntity;
 import com.aqiu.rxzone.request.NetRequest;
 import com.aqiu.rxzone.ui.base.BaseActivity;
 import com.aqiu.rxzone.utils.L;
 import com.aqiu.rxzone.utils.RxHelper;
+import com.aqiu.rxzone.utils.Tutils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
+import com.chad.library.adapter.base.loadmore.LoadMoreView;
+import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView;
 
 import java.util.List;
 
 import butterknife.BindView;
 import rx.Subscriber;
 
-import static android.nfc.tech.MifareUltralight.PAGE_SIZE;
 
 public class TestActivity extends BaseActivity implements SwipeRefreshLayout.OnRefreshListener, BaseQuickAdapter.RequestLoadMoreListener {
 
@@ -37,6 +37,7 @@ public class TestActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     private int pager;
     private boolean isOnRefresh;
     private boolean isOnLoadMore;
+    private SimpleLoadMoreView simpleLoadMoreView;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,13 +61,20 @@ public class TestActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         mSwipeRefreshWidget.setProgressViewOffset(false, 0, (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 24, getResources().getDisplayMetrics()));//设置进度圈休息的位置
         mSwipeRefreshWidget.setOnRefreshListener(this);//设置进度圈下拉响应
         //关于RecycleView
-        GridLayoutManager gridLayoutManager = new GridLayoutManager(TestActivity.this, 3);
-        gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
+        //        GridLayoutManager gridLayoutManager = new GridLayoutManager(TestActivity.this, 3);
+        //        gridLayoutManager.setOrientation(GridLayoutManager.VERTICAL);
         mRecy.setHasFixedSize(true);
-        mRecy.setLayoutManager(gridLayoutManager);
-        mRecy.setItemAnimator(null);
-//        mRecy.scheduleLayoutAnimation();
-//        mRecy.startLayoutAnimation();
+        //        mRecy.setLayoutManager(gridLayoutManager);
+        mRecy.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
+        mRecy.setItemAnimator(new DefaultItemAnimator());
+        mRecy.setPadding(8,8,8,8);
+        //设置item之间的间隔
+//        mRecy.addItemDecoration(new MyItemDecoration(this));
+        //        mRecy.setAnimation(new AlphaAnimation(0.0f, 1.0f));
+        //        mRecy.scheduleLayoutAnimation();
+        //        mRecy.startLayoutAnimation();
+        //        List<TngouEntity> list = new ArrayList<>();
+        //        initAdapter(list);
         netRequest(pager);
     }
 
@@ -76,21 +84,14 @@ public class TestActivity extends BaseActivity implements SwipeRefreshLayout.OnR
     }
 
 
-    private void initAdapter(List<Girls.TngouEntity> girls) {
+    private void initAdapter(List<TngouEntity> girls) {
         mQuickAdapter = new GirlsAdapter(girls);
-        @SuppressLint("InflateParams")
-        View view = LayoutInflater.from(TestActivity.this).inflate(R.layout.recy_foot, null);//自定义底部显示加载view
-        //        View emptyView = LayoutInflater.from(_mActivity).inflate(R.layout.recy_empty, null);//自定义空布局
-        TextView tv_foot_msg = (TextView) view.findViewById(R.id.id_tv_loadingmsg);
-        //        pb_foot = (ProgressBar) view.findViewById(pb_foot);
-        tv_foot_msg.setText("数据加载中....");
-        mQuickAdapter.setLoadingView(view);
+        simpleLoadMoreView = new SimpleLoadMoreView();
+        mQuickAdapter.setLoadMoreView(simpleLoadMoreView);
         //        mQuickAdapter.setEmptyView(emptyView);
-        mQuickAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_BOTTOM);//设置显示动画
-        mQuickAdapter.openLoadMore(PAGE_SIZE);
-        //        mQuickAdapter.setA
-        mQuickAdapter.setOnLoadMoreListener(this);
-        mRecy.setAdapter(mQuickAdapter);
+        mQuickAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);//设置显示动画
+        mQuickAdapter.setOnLoadMoreListener(this);//设置上拉加载响应
+        mQuickAdapter.setAutoLoadMoreSize(4);
     }
 
     private void netRequest(int i) {
@@ -98,66 +99,68 @@ public class TestActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                 .compose(new RxHelper<Girls>() {
                     @Override
                     public void doMain() {
-                        //                        if (SwipeRefreshLayout != null) {
-                        //                            SwipeRefreshLayout.setEnabled(true);
-                        //                        }
+
                     }
                 }.io_main(TestActivity.this))
                 .subscribe(new Subscriber<Girls>() {
-                    @Override
-                    public void onCompleted() {
-                        if (isOnRefresh) {
-                            mSwipeRefreshWidget.setRefreshing(false);
-                            isOnRefresh = false;
-                        }
-                        //                        if (isOnLoadMore) {
-                        //                            //                            girlsAdapter.loadComplete();
-                        //                            L.e("上拉完成_正确");
-                        //                            isOnLoadMore = false;
-                        //                        }
-                    }
+                               @Override
+                               public void onCompleted() {
+                                   if (isOnRefresh) {
+                                       mSwipeRefreshWidget.setRefreshing(false);
+                                       isOnRefresh = false;
+                                   }
+                                   L.e("onCompleted正常");
+                                   pager++;
+                               }
 
-                    @Override
-                    public void onError(Throwable e) {
-                        if (isOnRefresh) {
-                            mSwipeRefreshWidget.setRefreshing(false);
-                            isOnRefresh = false;
-                        }
-                        L.e("上拉完成_错误");
-                        mQuickAdapter.loadComplete();
-                        //                        if (isOnLoadMore) {
-                        //                            L.e("上拉完成_错误");
-                        //                            isOnLoadMore = false;
-                        //                        }
-                    }
-                    @Override
-                    public void onNext(Girls girls) {
-                        if (girls != null) {
-                            final List<Girls.TngouEntity> girlsTngou = girls.getTngou();
-                            synchronized (this) {
+                               @Override
+                               public void onError(Throwable e) {
+                                   L.e("错误");
+                                   if (isOnRefresh) {
+                                       mSwipeRefreshWidget.setRefreshing(false);
+                                       isOnRefresh = false;
+                                   }
+                                   if (mQuickAdapter != null) {
+                                       mQuickAdapter.loadMoreFail();
+                                       switch (simpleLoadMoreView.getLoadMoreStatus()) {
+                                           case LoadMoreView.STATUS_LOADING:
 
-                                mRecy.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        if (isOnLoadMore) {
-                                            L.e("上拉加载");
-                                            mQuickAdapter.addData(girlsTngou);
-                                            mQuickAdapter.notifyItemChanged(1);
-//                                            mQuickAdapter.notifyDataSetChanged();
-//                                            mQuickAdapter.notify();
-//                                            L.e(loading + "==家在了么");
-                                            //                                            mQuickAdapter.loadComplete();
-                                        } else {
-                                            initAdapter(girlsTngou);
-                                        }
-                                    }
-                                }, 100);
-                            }
-                        } else {
-                            L.e("上拉完成_错误");
-                        }
-                    }
-                });
+                                               break;
+                                           case LoadMoreView.STATUS_FAIL:
+                                               Tutils.showToast(TestActivity.this, "网络连接失败!");
+                                               break;
+                                           case LoadMoreView.STATUS_END:
+
+                                               break;
+                                       }
+                                   }
+
+                               }
+
+                               @Override
+                               public void onNext(Girls girls) {
+                                   if (girls != null) {
+                                       final List<TngouEntity> girlsTngou = girls.getTngou();
+                                       if (isOnLoadMore) {
+                                           mRecy.postDelayed(new Runnable() {
+                                               @Override
+                                               public void run() {
+                                                   L.e("onNext执行");
+                                                   mQuickAdapter.addData(girlsTngou);
+                                                   L.e("数据加载执行...");
+                                                   mQuickAdapter.loadMoreComplete();
+                                                   isOnLoadMore = false;
+                                               }
+                                           }, 500);
+                                       } else {
+                                           initAdapter(girlsTngou);
+                                           mRecy.setAdapter(mQuickAdapter);
+                                       }
+                                   }
+                               }
+                           }
+
+                );
     }
 
     /**
@@ -165,11 +168,11 @@ public class TestActivity extends BaseActivity implements SwipeRefreshLayout.OnR
      */
     @Override
     public void onRefresh() {
-        synchronized (this) {
-            pager = 1;
-            isOnRefresh = true;
-            netRequest(pager);
-        }
+        //        synchronized (this) {
+        pager = 1;
+        isOnRefresh = true;
+        netRequest(pager);
+        //        }
     }
 
     /**
@@ -177,11 +180,9 @@ public class TestActivity extends BaseActivity implements SwipeRefreshLayout.OnR
      */
     @Override
     public void onLoadMoreRequested() {
-        L.e("我触发了");
-        synchronized (this) {
-            isOnLoadMore = true;
-            L.e(pager + "");
-            netRequest(pager++);
-        }
+        L.e("上拉加载触发了");
+        isOnLoadMore = true;
+        L.e(pager + "");
+        netRequest(pager);
     }
 }

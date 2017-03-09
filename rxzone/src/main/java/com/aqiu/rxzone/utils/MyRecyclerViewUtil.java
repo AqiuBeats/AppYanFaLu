@@ -1,15 +1,11 @@
 package com.aqiu.rxzone.utils;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.LayoutManager;
 import android.util.TypedValue;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.widget.TextView;
 
 import com.aqiu.rxzone.R;
 import com.chad.library.adapter.base.BaseQuickAdapter;
@@ -96,11 +92,11 @@ public class MyRecyclerViewUtil {
         /**
          * 自定义上拉显示方案,可自定义
          */
-        @SuppressLint("InflateParams")
-        View view = LayoutInflater.from(context).inflate(R.layout.recy_foot, null);//自定义底部显示加载view
-        TextView tv_foot_msg = (TextView) view.findViewById(R.id.id_tv_loadingmsg);
-        tv_foot_msg.setText("数据加载中....");
-        baseQuickAdapter.setLoadingView(view);
+//        @SuppressLint("InflateParams")
+//        View view = LayoutInflater.from(context).inflate(R.layout.recy_foot, null);//自定义底部显示加载view
+//        TextView tv_foot_msg = (TextView) view.findViewById(R.id.id_tv_loadingmsg);
+//        tv_foot_msg.setText("数据加载中....");
+//        baseQuickAdapter.setLoadingView(view);
         baseQuickAdapter.openLoadAnimation(BaseQuickAdapter.SLIDEIN_BOTTOM);//设置显示动画
         baseQuickAdapter.setOnLoadMoreListener(new BaseQuickAdapter.RequestLoadMoreListener() {
             @Override

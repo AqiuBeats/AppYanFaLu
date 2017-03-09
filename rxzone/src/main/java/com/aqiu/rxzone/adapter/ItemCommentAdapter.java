@@ -12,7 +12,7 @@ import java.util.List;
  * 直播点播itemComment的Adapter
  * Created by aqiu on 16/12/1.
  */
-public class ItemCommentAdapter extends BaseQuickAdapter<Person> {
+public class ItemCommentAdapter extends BaseQuickAdapter<Person,BaseViewHolder> {
 
     public ItemCommentAdapter(List<Person> list) {
         super(R.layout.item_comment_recy, list);
