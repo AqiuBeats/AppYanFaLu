@@ -46,9 +46,9 @@ public class GirlsAdapter extends BaseQuickAdapter<TngouEntity,BaseViewHolder> {
                 .with(MyApplication.getObjectContext())
 //                .load(WebApi.BASE_URL_IMAGE + girlEntity.getImg())
                 .load(new GetRandomImg().getIdImg())
-//                .placeholder(R.mipmap.ic_launcher)//设置占位图
+                .placeholder(R.mipmap.white)//设置占位图
 //                .error(R.mipmap.lv_failure)//设置错误图片
-                .fitCenter()
+//                .override()
                 .crossFade()
                 .into((ImageView) baseViewHolder.getView(R.id.item_img));
     }

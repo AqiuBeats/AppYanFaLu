@@ -15,7 +15,6 @@ import com.aqiu.rxzone.request.NetRequest;
 import com.aqiu.rxzone.ui.base.BaseActivity;
 import com.aqiu.rxzone.utils.L;
 import com.aqiu.rxzone.utils.RxHelper;
-import com.aqiu.rxzone.utils.Tutils;
 import com.chad.library.adapter.base.BaseQuickAdapter;
 import com.chad.library.adapter.base.loadmore.LoadMoreView;
 import com.chad.library.adapter.base.loadmore.SimpleLoadMoreView;
@@ -67,7 +66,7 @@ public class TestActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         //        mRecy.setLayoutManager(gridLayoutManager);
         mRecy.setLayoutManager(new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL));
         mRecy.setItemAnimator(new DefaultItemAnimator());
-        mRecy.setPadding(8,8,8,8);
+//        mRecy.setPadding(8,8,8,8);
         //设置item之间的间隔
 //        mRecy.addItemDecoration(new MyItemDecoration(this));
         //        mRecy.setAnimation(new AlphaAnimation(0.0f, 1.0f));
@@ -89,13 +88,15 @@ public class TestActivity extends BaseActivity implements SwipeRefreshLayout.OnR
         simpleLoadMoreView = new SimpleLoadMoreView();
         mQuickAdapter.setLoadMoreView(simpleLoadMoreView);
         //        mQuickAdapter.setEmptyView(emptyView);
-        mQuickAdapter.openLoadAnimation(BaseQuickAdapter.ALPHAIN);//设置显示动画
+        mQuickAdapter.openLoadAnimation(BaseQuickAdapter.SCALEIN);//设置显示动画
         mQuickAdapter.setOnLoadMoreListener(this);//设置上拉加载响应
-        mQuickAdapter.setAutoLoadMoreSize(4);
+        mQuickAdapter.setAutoLoadMoreSize(4);//当显示倒数第4个时,进行上拉加载
+        mRecy.setAdapter(mQuickAdapter);
+//        mQuickAdapter.notifyDataSetChanged();
     }
 
     private void netRequest(int i) {
-        NetRequest.getGirlsObservable(i, 10)
+        NetRequest.getGirlsObservable(i, 20)
                 .compose(new RxHelper<Girls>() {
                     @Override
                     public void doMain() {
@@ -127,7 +128,7 @@ public class TestActivity extends BaseActivity implements SwipeRefreshLayout.OnR
 
                                                break;
                                            case LoadMoreView.STATUS_FAIL:
-                                               Tutils.showToast(TestActivity.this, "网络连接失败!");
+//                                               Tutils.showToast(TestActivity.this, "网络连接失败!");
                                                break;
                                            case LoadMoreView.STATUS_END:
 
@@ -141,6 +142,10 @@ public class TestActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                                public void onNext(Girls girls) {
                                    if (girls != null) {
                                        final List<TngouEntity> girlsTngou = girls.getTngou();
+//                                       if(isOnRefresh){
+//                                           initAdapter(girlsTngou);
+//                                           isOnRefresh = false;
+//                                       }
                                        if (isOnLoadMore) {
                                            mRecy.postDelayed(new Runnable() {
                                                @Override
@@ -153,8 +158,18 @@ public class TestActivity extends BaseActivity implements SwipeRefreshLayout.OnR
                                                }
                                            }, 500);
                                        } else {
-                                           initAdapter(girlsTngou);
-                                           mRecy.setAdapter(mQuickAdapter);
+                                           mRecy.postDelayed(new Runnable() {
+                                               @Override
+                                               public void run() {
+                                                   if(mQuickAdapter!=null){
+                                                       L.e("初始化之后下拉");
+                                                       mQuickAdapter.setNewData(girlsTngou);
+                                                   }else {
+                                                       L.e("初始化下拉");
+                                                       initAdapter(girlsTngou);
+                                                   }
+                                               }
+                                           }, 500);
                                        }
                                    }
                                }

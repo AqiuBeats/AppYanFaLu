@@ -37,7 +37,7 @@ public class MainActivity extends BaseActivity {
 
     @OnClick(R.id.bt1)
     public void onClick() {
-        Intent intent = new Intent(MainActivity.this, SecondActivity.class);
+        Intent intent = new Intent(MainActivity.this, TestActivity.class);
         startActivity(intent);
     }
 }
