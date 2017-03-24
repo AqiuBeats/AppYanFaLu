@@ -21,7 +21,7 @@ public abstract class BaseActivity extends RxActivity {
     /**
      * activity控制
      */
-    public static Map<String, WeakReference<Activity>> openedActivitys = new LinkedHashMap<>();// 已经打开的activity
+    public static  Map<String, WeakReference<Activity>> openedActivitys = new LinkedHashMap<>();// 已经打开的activity
     public Bundle savedInstanceState;
     private long exitTime = 0;
 
